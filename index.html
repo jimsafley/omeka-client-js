@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.omeka-client.js"></script>
+    <script type="text/javascript">
+    function sendForm() {
+        var client = $.omekaClient( $( "#endpoint" ).val() );
+        var key = $( "#key" ).val();
+        var file = $( "#file" )[0].files[0];
+        var data = {
+            item: {
+                id: $( "#item-id" ).val()
+            }
+        };
+        client.setKey( key );
+        client.postFile( file, data )
+            .done(function( data ) {
+                $( "#output" ).text( JSON.stringify( data, null, 2 ) );
+            })
+            .fail(function( jqXHR ) {
+                $( "#output" ).text( jqXHR.responseText );
+            });
+    }
+    </script>
+</head>
+<body>
+    <h2>Upload File</h2>
+    <form enctype="multipart/form-data" method="post">
+        <p><input type="text" id="endpoint" /> Endpoint</p>
+        <p><input type="text" id="key" /> Key </p>
+        <p><input type="text" id="item-id" /> Item ID</p>
+        <p><input type="file" id="file" required /></p>
+        <a href="javascript:sendForm()">Post the file!</a>
+    </form>
+    <pre id="output"></pre>
+</body>
+</html>
